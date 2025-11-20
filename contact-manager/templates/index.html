@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Contact Manager{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>Welcome to Contact Manager</h1>
+    <p class="lead">A simple and efficient way to manage your contacts</p>
+    
+    <div class="stats-card">
+        <div class="stat">
+            <div class="stat-number">{{ total_contacts }}</div>
+            <div class="stat-label">Total Contacts</div>
+        </div>
+    </div>
+
+    <div class="hero-actions">
+        <a href="{{ url_for('contacts_list') }}" class="btn btn-primary btn-lg">View All Contacts</a>
+        <a href="{{ url_for('add_contact') }}" class="btn btn-secondary btn-lg">Add New Contact</a>
+    </div>
+</div>
+
+<div class="features">
+    <h2>Features</h2>
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="feature-icon">📝</div>
+            <h3>Easy Management</h3>
+            <p>Create, read, update, and delete contacts with ease</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔍</div>
+            <h3>Quick Search</h3>
+            <p>Find contacts instantly by name, phone, or email</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">💾</div>
+            <h3>Database Powered</h3>
+            <p>All data safely stored in a reliable database</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3>Import/Export</h3>
+            <p>Bulk manage contacts via CSV files</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

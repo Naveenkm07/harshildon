@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Contacts - Contact Manager{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>All Contacts</h1>
+    <a href="{{ url_for('add_contact') }}" class="btn btn-primary">+ Add New Contact</a>
+</div>
+
+<div class="search-box">
+    <form method="GET" action="{{ url_for('contacts_list') }}">
+        <input 
+            type="text" 
+            name="search" 
+            placeholder="Search by name, phone, or email..." 
+            value="{{ search_query or '' }}"
+            class="search-input"
+        >
+        <button type="submit" class="btn btn-secondary">Search</button>
+        {% if search_query %}
+            <a href="{{ url_for('contacts_list') }}" class="btn btn-outline">Clear</a>
+        {% endif %}
+    </form>
+</div>
+
+{% if search_query %}
+    <p class="search-info">Showing results for: <strong>{{ search_query }}</strong></p>
+{% endif %}
+
+{% if contacts %}
+    <div class="table-container">
+        <table class="contacts-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Company</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for contact in contacts %}
+                <tr>
+                    <td>
+                        <a href="{{ url_for('view_contact', contact_id=contact.id) }}" class="contact-name">
+                            {{ contact.full_name }}
+                        </a>
+                    </td>
+                    <td>{{ contact.phone_number }}</td>
+                    <td>{{ contact.email }}</td>
+                    <td>{{ contact.company or '-' }}</td>
+                    <td class="actions">
+                        <a href="{{ url_for('view_contact', contact_id=contact.id) }}" class="btn btn-sm btn-info" title="View">👁️</a>
+                        <a href="{{ url_for('edit_contact', contact_id=contact.id) }}" class="btn btn-sm btn-warning" title="Edit">✏️</a>
+                        <button 
+                            onclick="confirmDelete({{ contact.id }}, '{{ contact.full_name }}')" 
+                            class="btn btn-sm btn-danger"
+                            title="Delete"
+                        >🗑️</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    {% if pagination and pagination.pages > 1 %}
+        <div class="pagination">
+            {% if pagination.has_prev %}
+                <a href="{{ url_for('contacts_list', page=pagination.prev_num, search=search_query) }}" class="btn btn-sm">← Previous</a>
+            {% endif %}
+            
+            <span class="page-info">Page {{ pagination.page }} of {{ pagination.pages }}</span>
+            
+            {% if pagination.has_next %}
+                <a href="{{ url_for('contacts_list', page=pagination.next_num, search=search_query) }}" class="btn btn-sm">Next →</a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% else %}
+    <div class="empty-state">
+        <p>No contacts found.</p>
+        {% if search_query %}
+            <p>Try a different search term or <a href="{{ url_for('contacts_list') }}">view all contacts</a>.</p>
+        {% else %}
+            <a href="{{ url_for('add_contact') }}" class="btn btn-primary">Add Your First Contact</a>
+        {% endif %}
+    </div>
+{% endif %}
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <h2>Confirm Delete</h2>
+        <p>Are you sure you want to delete <strong id="contactName"></strong>?</p>
+        <p class="warning-text">This action cannot be undone.</p>
+        <form id="deleteForm" method="POST">
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

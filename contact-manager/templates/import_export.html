@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Import/Export - Contact Manager{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Import / Export Contacts</h1>
+</div>
+
+<div class="import-export-container">
+    <!-- Export Section -->
+    <div class="ie-card">
+        <div class="ie-icon">📤</div>
+        <h2>Export Contacts</h2>
+        <p>Download all your contacts as a CSV file.</p>
+        <a href="{{ url_for('export_contacts') }}" class="btn btn-primary btn-lg">Export to CSV</a>
+    </div>
+
+    <!-- Import Section -->
+    <div class="ie-card">
+        <div class="ie-icon">📥</div>
+        <h2>Import Contacts</h2>
+        <p>Upload a CSV file to import contacts. Existing contacts (matched by email) will be updated.</p>
+        
+        <form method="POST" enctype="multipart/form-data" class="import-form">
+            <div class="form-group">
+                <label for="csv_file" class="file-label">
+                    <span class="file-input-wrapper">
+                        <input 
+                            type="file" 
+                            id="csv_file" 
+                            name="csv_file" 
+                            accept=".csv"
+                            required
+                            class="file-input"
+                            onchange="updateFileName(this)"
+                        >
+                        <span class="file-button">Choose File</span>
+                        <span class="file-name" id="fileName">No file chosen</span>
+                    </span>
+                </label>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg">Import from CSV</button>
+        </form>
+    </div>
+</div>
+
+<!-- CSV Format Information -->
+<div class="info-section">
+    <h2>CSV File Format</h2>
+    <p>Your CSV file should have the following columns (header row required):</p>
+    
+    <div class="code-block">
+        <code>full_name,phone_number,email,address,company,notes</code>
+    </div>
+
+    <h3>Required Fields:</h3>
+    <ul>
+        <li><strong>full_name</strong> - Contact's full name</li>
+        <li><strong>phone_number</strong> - Phone number</li>
+        <li><strong>email</strong> - Email address (used to detect duplicates)</li>
+    </ul>
+
+    <h3>Optional Fields:</h3>
+    <ul>
+        <li><strong>address</strong> - Physical address</li>
+        <li><strong>company</strong> - Company name</li>
+        <li><strong>notes</strong> - Additional notes</li>
+    </ul>
+
+    <h3>Example CSV:</h3>
+    <div class="code-block">
+        <pre>full_name,phone_number,email,address,company,notes
+John Doe,+1234567890,john@example.com,"123 Main St, City",Acme Corp,Important client
+Jane Smith,+0987654321,jane@example.com,"456 Oak Ave, Town",Tech Inc,Friend from college</pre>
+    </div>
+
+    <div class="alert alert-info">
+        <strong>Note:</strong> If a contact with the same email already exists, it will be updated with the new information from the CSV file.
+    </div>
+</div>
+{% endblock %}
