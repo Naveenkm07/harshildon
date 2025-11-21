@@ -17,7 +17,7 @@
   ],
   "env": {
     "FLASK_ENV": "production",
-    "DATABASE_URL": "sqlite:///tmp/contacts.db",
+    "DATABASE_URL": "sqlite:////tmp/contacts.db",
     "SECRET_KEY": "replace-me-secret"
   }
 }
