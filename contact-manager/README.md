@@ -199,6 +199,29 @@ Don't forget to install the MySQL driver:
 pip install pymysql
 ```
 
+## Deployment on Vercel
+
+Vercel can host this Flask app via their serverless Python runtime.
+
+1. **Install dependencies**
+   ```bash
+   npm install -g vercel
+   vercel login
+   ```
+2. **Set required environment variables**
+   ```bash
+   vercel env add DATABASE_URL
+   vercel env add SECRET_KEY
+   ```
+   - Use an external database (Neon, Supabase, PlanetScale, etc.). Vercel’s filesystem is ephemeral, so SQLite files are not persisted across requests.
+3. **Deploy**
+   ```bash
+   vercel          # preview
+   vercel --prod   # production deploy
+   ```
+
+The root-level `vercel.json` routes all requests to `contact-manager/app.py` and pins the runtime to Python 3.11. To test locally with Vercel’s environment, run `vercel dev`.
+
 ## Troubleshooting
 
 ### Common Issues
