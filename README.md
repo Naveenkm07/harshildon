@@ -21,7 +21,7 @@ python app.py                   # served on http://localhost:4000
    vercel --prod
    ```
    Vercel reads `vercel.json` and builds `contact-manager/app.py` using `@vercel/python`.
-3. Configure environment variables in Vercel (Dashboard → Settings → Environment Variables or `vercel env add`):
+3. Configure environment variables in Vercel (Dashboard → Settings → Environment Variables or `vercel env add`). `vercel.json` contains placeholder defaults (`sqlite:///tmp/contacts.db` and `replace-me-secret`) so deployments work out-of-the-box, but you should override them for production:
    - `DATABASE_URL` – production database connection string (SQLite on Vercel is ephemeral; prefer hosted DBs such as Neon, Supabase, PlanetScale, etc.).
    - `SECRET_KEY` – Flask secret key.
 

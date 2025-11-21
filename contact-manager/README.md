@@ -220,7 +220,7 @@ Vercel can host this Flask app via their serverless Python runtime.
    vercel --prod   # production deploy
    ```
 
-The root-level `vercel.json` routes all requests to `contact-manager/app.py` and pins the runtime to Python 3.11. To test locally with Vercel’s environment, run `vercel dev`.
+> **Note:** `vercel.json` ships with placeholder values for `DATABASE_URL` (pointing to an ephemeral SQLite file) and `SECRET_KEY`. Replace them with your production credentials via the Vercel dashboard/CLI or edit `vercel.json` before deploying. The config routes all requests to `contact-manager/app.py` and pins the runtime to Python 3.11. To test locally with Vercel’s environment, run `vercel dev`.
 
 ## Troubleshooting
 
