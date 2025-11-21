@@ -1,6 +1,6 @@
 # Contact Manager with Database Support
 
-A fully functional web-based contact management system built with Flask and SQLite. Features include complete CRUD operations, search functionality, CSV import/export, and a responsive user interface.
+An offline-first contact management system built with Flask and SQLite. Everything runs locally out of the box—no external services are required. The app provides full CRUD flows, CSV import/export, responsive UI, server-side validation, logging, and pagination.
 
 ## Features
 
@@ -64,11 +64,11 @@ This will install:
 
 ### Step 4: Configure the Application
 
-The application uses a `config.py` file for configuration. By default, it uses SQLite database. You can modify settings in `config.py` if needed:
+Out of the box the app uses a durable SQLite database stored at `contact-manager/contacts.db`, so you can stay completely offline. Configuration happens via `config.py`:
 
-- **Database**: SQLite (default) - creates `contacts.db` in the project directory
-- **Secret Key**: Change the `SECRET_KEY` in production
-- **Logging**: Logs are stored in `logs/app.log`
+- **Database**: `SQLALCHEMY_DATABASE_URI` defaults to SQLite. Swap in MySQL/Postgres URIs if you need something else.
+- **Secret Key**: `SECRET_KEY` secures Flask sessions. Change it for production.
+- **Logging**: Rotating logs are stored under `logs/app.log`.
 
 ### Step 5: Initialize the Database
 
@@ -186,11 +186,11 @@ You can configure the application using environment variables:
 
 ### Database Configuration
 
-**SQLite (Default):**
-The application uses SQLite by default, which creates a `contacts.db` file automatically.
+**SQLite (default & offline):**
+Runs locally and persists in `contacts.db`. Backup or reset by copying/deleting the file.
 
-**MySQL (Optional):**
-To use MySQL, update `config.py`:
+**MySQL/Postgres (optional):**
+If you want to point the app at another RDBMS (or a hosted service), update `SQLALCHEMY_DATABASE_URI`:
 ```python
 SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://username:password@localhost/contact_manager'
 ```
@@ -198,29 +198,25 @@ Don't forget to install the MySQL driver:
 ```bash
 pip install pymysql
 ```
+For Postgres use the `postgresql+psycopg2://` scheme and install `psycopg2-binary`.
 
-## Deployment on Vercel
+## Offline workflow
 
-Vercel can host this Flask app via their serverless Python runtime.
+- **Data location:** `contacts.db` (SQLite) inside this directory. Back up the file to save your data.
+- **Logs:** `logs/app.log` plus console output.
+- **Imports/Exports:** Use the Import/Export page to move contacts as CSV when sharing data between machines.
 
-1. **Install dependencies**
-   ```bash
-   npm install -g vercel
-   vercel login
-   ```
-2. **Set required environment variables**
-   ```bash
-   vercel env add DATABASE_URL
-   vercel env add SECRET_KEY
-   ```
-   - Use an external database (Neon, Supabase, PlanetScale, etc.). Vercel’s filesystem is ephemeral, so SQLite files are not persisted across requests.
-3. **Deploy**
-   ```bash
-   vercel          # preview
-   vercel --prod   # production deploy
-   ```
+## Optional deployment on Vercel
 
-> **Note:** `vercel.json` ships with placeholder values for `DATABASE_URL` (pointing to an ephemeral SQLite file) and `SECRET_KEY`. Replace them with your production credentials via the Vercel dashboard/CLI or edit `vercel.json` before deploying. The config routes all requests to `contact-manager/app.py` and pins the runtime to Python 3.11. To test locally with Vercel’s environment, run `vercel dev`.
+If you want a quick hosted demo, the repo root includes `vercel.json`. Deploying is entirely optional—the app continues to work offline. When you do deploy:
+
+1. Install Vercel CLI: `npm install -g vercel` and `vercel login`.
+2. From the repo root run `vercel`, then `vercel --prod`.
+3. Configure env vars if you need persistent storage online:
+   - `DATABASE_URL` (defaults to `sqlite:///tmp/contacts.db` for demos; use a hosted DB URI for persistence).
+   - `SECRET_KEY` (defaults to `replace-me-secret`; override in production).
+
+Because Vercel’s filesystem is ephemeral, SQLite data resets between function invocations. The defaults are fine for live previews; bring your own remote DB for production setups.
 
 ## Troubleshooting
 

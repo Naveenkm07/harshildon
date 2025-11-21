@@ -1,28 +1,38 @@
 # harshildon
 
-This repository hosts the **Contact Manager** Flask application located in `contact-manager/`. The app delivers full CRUD contact management, CSV import/export, search, pagination, logging, and a responsive UI.
+Offline-first **Contact Manager** built with Flask, SQLAlchemy, and pure HTML/CSS/JS. The full application lives in the `contact-manager/` directory and ships with everything needed to run entirely on your machine (SQLite persistence, CSV import/export, search, pagination, logging, etc.). Vercel configuration is included for optional one-click hosting, but no cloud database is required.
 
-## Quick Start (Local)
+## 🚀 Local Development (offline)
 
 ```bash
-cd contact-manager
+git clone https://github.com/Naveenkm07/harshildon.git
+cd harshildon/contact-manager
 python -m venv venv
 venv\Scripts\activate           # source venv/bin/activate on macOS/Linux
 pip install -r requirements.txt
-python app.py                   # served on http://localhost:4000
+python app.py                   # launches on http://localhost:4000
 ```
 
-## Deploying to Vercel
+- A fresh `contacts.db` SQLite file is created automatically on first launch.
+- All data stays on disk under `contact-manager/contacts.db`, so you can use the app completely offline.
+- Logs are written to `contact-manager/logs/app.log` for quick debugging.
+
+## 🌐 Optional: Deploying to Vercel
+
+The repo root contains `vercel.json`, which points the Python builder at `contact-manager/app.py`. To publish a demo build:
 
 1. Install the [Vercel CLI](https://vercel.com/docs/cli): `npm i -g vercel`
-2. From the repo root run:
+2. From the repo root:
    ```bash
-   vercel
-   vercel --prod
+   vercel          # preview deployment
+   vercel --prod   # production deployment
    ```
-   Vercel reads `vercel.json` and builds `contact-manager/app.py` using `@vercel/python`.
-3. Configure environment variables in Vercel (Dashboard → Settings → Environment Variables or `vercel env add`). `vercel.json` contains placeholder defaults (`sqlite:///tmp/contacts.db` and `replace-me-secret`) so deployments work out-of-the-box, but you should override them for production:
-   - `DATABASE_URL` – production database connection string (SQLite on Vercel is ephemeral; prefer hosted DBs such as Neon, Supabase, PlanetScale, etc.).
-   - `SECRET_KEY` – Flask secret key.
+3. Environment variables (Dashboard → Settings → Environment Variables, or `vercel env add`):
+   - `DATABASE_URL` – optional. Defaults to `sqlite:///tmp/contacts.db` for ephemeral demos. Provide a hosted DB URI (Postgres/MySQL/etc.) if you need persistence online.
+   - `SECRET_KEY` – Flask secret key. Defaults to `replace-me-secret`; override in production.
 
-All traffic is routed to the Flask app through `vercel.json`, which pins the runtime to Python 3.11. Refer to `contact-manager/README.md` for the full feature list and usage details.
+Everything else is automatic: the runtime is pinned to Python 3.11 and all routes are proxied to Flask.
+
+## 📚 Documentation
+
+See [`contact-manager/README.md`](contact-manager/README.md) for the full feature list, screenshots, CSV format, troubleshooting tips, and development notes. That file also explains how to change database backends (SQLite/MySQL) or customize pagination, logging, and import/export behavior.
