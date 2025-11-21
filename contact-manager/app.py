@@ -23,12 +23,11 @@ app.config.from_object(Config)
 # Initialize database
 db.init_app(app)
 
-# Setup logging
-if not os.path.exists('logs'):
-    os.makedirs('logs')
+LOG_DIR = app.config['LOG_DIR']
+os.makedirs(LOG_DIR, exist_ok=True)
 
 file_handler = RotatingFileHandler(
-    app.config['LOG_FILE'],
+    os.path.join(LOG_DIR, 'app.log'),
     maxBytes=10240000,  # 10MB
     backupCount=10
 )

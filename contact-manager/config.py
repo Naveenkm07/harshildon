@@ -23,7 +23,8 @@ class Config:
     CONTACTS_PER_PAGE = 10
     
     # Logging
-    LOG_FILE = os.path.join(BASE_DIR, 'logs', 'app.log')
+    LOG_DIR = os.environ.get('LOG_DIR') or os.path.join(BASE_DIR, 'logs')
+    LOG_FILE = os.path.join(LOG_DIR, 'app.log')
     LOG_LEVEL = 'INFO'
     
     # Upload settings
