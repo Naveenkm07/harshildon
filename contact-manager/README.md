@@ -82,13 +82,13 @@ Start the Flask development server:
 python app.py
 ```
 
-The application will start on `http://localhost:5000` (or `http://0.0.0.0:5000`).
+The application will start on `http://localhost:4000` (or `http://0.0.0.0:4000`).
 
 ### Step 7: Access the Application
 
 Open your web browser and navigate to:
 ```
-http://localhost:5000
+http://localhost:4000
 ```
 
 ## Usage
