@@ -30,6 +30,7 @@ The repo root contains `vercel.json`, which points the Python builder at `contac
 3. Environment variables (Dashboard → Settings → Environment Variables, or `vercel env add`):
    - `DATABASE_URL` – optional. Defaults to `sqlite:///tmp/contacts.db` for ephemeral demos. Provide a hosted DB URI (Postgres/MySQL/etc.) if you need persistence online.
    - `SECRET_KEY` – Flask secret key. Defaults to `replace-me-secret`; override in production.
+   - `LOG_DIR` – optional. Defaults to `/tmp/logs` on Vercel (writable filesystem). Set to `logs` for local development.
 
 Everything else is automatic: the runtime is pinned to Python 3.11 and all routes are proxied to Flask.
 
