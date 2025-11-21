@@ -1,9 +1,14 @@
 import os
+import sys
 import logging
 from logging.handlers import RotatingFileHandler
 from flask import Flask, render_template, request, redirect, url_for, flash, send_file
 from datetime import datetime
 import io
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
 
 from config import Config
 from models import db, Contact
