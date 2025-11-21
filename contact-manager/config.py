@@ -22,8 +22,16 @@ class Config:
     # Pagination
     CONTACTS_PER_PAGE = 10
     
-    # Logging
-    LOG_DIR = os.environ.get('LOG_DIR') or os.path.join(BASE_DIR, 'logs')
+    # Logging - use /tmp/logs on Vercel (read-only filesystem), logs/ locally
+    # Check environment variable first, then fallback to /tmp/logs if on Vercel, else local logs
+    if os.environ.get('LOG_DIR'):
+        LOG_DIR = os.environ.get('LOG_DIR')
+    elif os.environ.get('VERCEL') or '/var/task' in BASE_DIR:
+        # Running on Vercel - use /tmp which is writable
+        LOG_DIR = '/tmp/logs'
+    else:
+        # Local development - use project directory
+        LOG_DIR = os.path.join(BASE_DIR, 'logs')
     LOG_FILE = os.path.join(LOG_DIR, 'app.log')
     LOG_LEVEL = 'INFO'
     
